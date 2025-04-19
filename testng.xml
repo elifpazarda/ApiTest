@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="SelenTest Suite">
+    <test name="API Testleri">
+        <classes>
+            <class name="tests.GetPostsTest"/>
+        </classes>
+    </test>
+</suite>
