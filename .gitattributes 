@@ -1,1 +1,2 @@
-test-output/*.html linguist-generated
+test-output/*.html binary
+test-output/*.pdf binary
