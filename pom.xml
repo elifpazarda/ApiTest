@@ -37,11 +37,23 @@
             <artifactId>extentreports</artifactId>
             <version>4.1.7</version>
         </dependency>
-        <!-- logger icin gerekliymis ama suan henuz anlamadım-->
+        <!-- logger icin gerekli fakat henuz kullanmadım-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
+        </dependency>
+        <!-- pdf rapor üretimi icin-->
+        <dependency>
+            <groupId>com.openhtmltopdf</groupId>
+            <artifactId>openhtmltopdf-pdfbox</artifactId>
+            <version>1.0.10</version>
+        </dependency>
+        <!-- pdf icin jsoup-->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.4</version>
         </dependency>
     </dependencies>
 

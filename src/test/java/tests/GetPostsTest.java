@@ -12,8 +12,6 @@ public class GetPostsTest extends BaseTest {
     @Test
     public void testGetPosts() {
         try {
-            test = extent.createTest("GET /posts - Basit GET istegi testi");
-
             test.log(Status.INFO, "GET istegi baslatildi: https://jsonplaceholder.typicode.com/posts");
 
             given().

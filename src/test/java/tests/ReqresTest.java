@@ -1,39 +1,44 @@
 package tests;
 
 import base.BaseTest;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 public class ReqresTest extends BaseTest {
 
-    @Test
-    public void testGetUserById() {
-        test = extent.createTest("GET /api/users/2 - Kullanıcı bilgisi getirme testi");
+    // DataProvider – userId listesi
+    @DataProvider(name = "userIds")
+    public Object[][] provideUserIds() {
+        return new Object[][] {
+                {2}, {5}, {10}
+        };
+    }
 
+    // GET test – her userId için ayrı çalışır
+    @Test(dataProvider = "userIds")
+    public void testGetUserById(int userId) {
         given().
                 when().
-                get("https://reqres.in/api/users/2").
+                get("https://reqres.in/api/users/" + userId).
                 then().
                 assertThat().
                 statusCode(200).
                 contentType("application/json").
-                body("data.id", equalTo(2)).
-                body("data.first_name", equalTo("Janet"));
+                body("data.id", equalTo(userId));
 
-        test.pass("GET isteği başarılı şekilde doğrulandı.");
+        test.pass("GET isteği userId=" + userId + " için başarıyla doğrulandı.");
     }
-    @Test
-    public void testCreateUser() {
-        test = extent.createTest("POST /api/users - Yeni kullanıcı oluşturma testi");
 
-        String requestBody = """
-            {
-                "name": "Elif",
-                "job": "QA Engineer"
-            }
-            """;
+
+    @Test
+    public void testCreateUser() throws Exception {
+        // JSON veriyi dosyadan oku
+        String requestBody = Files.readString(Paths.get("src/test/resources/testdata/createUser.json"));
 
         given().
                 header("Content-Type", "application/json").
@@ -50,14 +55,14 @@ public class ReqresTest extends BaseTest {
 
         test.pass("POST isteği ile kullanıcı başarılı şekilde oluşturuldu.");
     }
+
+
     @Test
     public void testUpdateUser() {
-        test = extent.createTest("PUT /api/users/2 - Kullanıcı güncelleme testi");
-
         String requestBody = """
         {
             "name": "Elif",
-            "job": "Senior QA Engineer"
+            "job": "Ceramic Artist"
         }
         """;
 
@@ -70,15 +75,14 @@ public class ReqresTest extends BaseTest {
                 assertThat().
                 statusCode(200).
                 body("name", equalTo("Elif")).
-                body("job", equalTo("Senior QA Engineer")).
+                body("job", equalTo("Ceramic Artist")).
                 body("updatedAt", notNullValue());
 
         test.pass("PUT isteği ile kullanıcı başarılı şekilde güncellendi.");
     }
+
     @Test
     public void testDeleteUser() {
-        test = extent.createTest("DELETE /api/users/2 - Kullanıcı silme testi");
-
         given().
                 when().
                 delete("https://reqres.in/api/users/2").
@@ -88,6 +92,4 @@ public class ReqresTest extends BaseTest {
 
         test.pass("DELETE isteği ile kullanıcı başarılı şekilde silindi.");
     }
-
-
 }
