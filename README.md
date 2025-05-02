@@ -59,8 +59,8 @@ Each test scenario validates the responses of the related API endpoints based on
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/SelenTest.git
-cd SelenTest
+git clone https://github.com/your-username/ApiTest.git
+cd ApiTest
 ```
 
 2. Install dependencies (if using Maven):
