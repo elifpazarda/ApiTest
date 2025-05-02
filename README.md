@@ -1,34 +1,92 @@
-# API Test Otomasyon Projesi
+# API Test Automation Project
 
-Bu repo, çeşitli web servisleri için gerçekleştirilmiş API test otomasyon örneklerini içermektedir. Proje, **Rest Assured** kütüphanesi kullanılarak geliştirilmiş olup, test senaryoları **TestNG** framework'ü ile yönetilmektedir.
+This repository contains API test automation examples developed for various web services. The project is built using the Rest Assured library, with test scenarios managed through the TestNG framework.
 
-Test sonuçlarının detaylı biçimde raporlanması için **Extent Reports** entegre edilmiş, bu raporlar PDF formatına dönüştürülerek saklanmıştır. Sürekli entegrasyon/teslimat (CI/CD) süreçleri için **GitHub Actions** yapılandırılmış, testlerin daha hızlı ve verimli çalışması için **paralel test özelliği** uygulanmıştır.
-
----
-
-## İçerik
-
-Bu proje içerisinde aşağıdaki API'ler için test senaryoları yer almaktadır:
-
-- **jsonplaceholder.typicode.com**: Basit GET operasyonlarını ve kullanıcı verilerini test eden örnekler
-- **reqres.in**: Kullanıcı bilgilerini getirme, oluşturma, güncelleme ve silme (CRUD) işlemleri
-- **restcountries.com**: Türkçe konuşulan ülkelerin bölge ve başkent bilgileri doğrulama
-- **fakerestapi.azurewebsites.net**: Aktivite verilerinin sayısını ve başlıklarını test etme
-
-Her bir test senaryosu, ilgili API endpoint'lerine yapılan isteklerin yanıtlarını belirli kriterlere göre doğrulamaktadır:
-- HTTP durum kodları
-- İçerik tipi (Content-Type)
-- JSON body içerikleri
-- Yanıt yapısının bütünlüğü
+To provide detailed reporting of test results, Extent Reports has been integrated, and the reports are converted into PDF format for archiving. GitHub Actions has been configured for Continuous Integration/Continuous Deployment (CI/CD) processes.
 
 ---
 
-## Kullanılan Teknolojiler
+##  Project Structure
 
-- **Java**: Projenin geliştirme dili
-- **Rest Assured**: API istekleri ve yanıtlarını test etmek için kullanılan Java kütüphanesi
-- **TestNG**: Test organizasyonu ve paralel çalıştırma için kullanılan güçlü framework
-- **Extent Reports**: Test çıktılarının HTML rapor olarak görselleştirilmesini sağlar
-- **openhtmltopdf + jsoup**: HTML raporların PDF formatına dönüştürülmesinde kullanılır
-- **GitHub Actions**: CI/CD sürecinde testleri otomatikleştirir ve raporları yükler
+```
+ApiTest/
+├── src/
+│   └── test/
+│       └── java/
+│           ├── base/                   
+│           │   └── BaseTest.java
+│           ├── tests/                 
+│           │   ├── FakeRestApiTest.java
+│           │   ├── GetPostsTest.java
+│           │   ├── ReqresTest.java
+│           │   └── RestCountriesTest.java
+│           └── utils/                  
+│               └── PdfReportUtil.java
+│
+├── src/
+│   └── test/
+│       └── resources/
+│           └── testdata/              
+│               └── createUser.json
+│
+├── test-output/
+│   ├── extent-report.html             
+│   └── pdf-reports/
+│       └── extent-report.pdf          
+│
+└── README.md
+```
+---
 
+## Contents
+
+This project includes test scenarios for the following APIs:
+
+- **jsonplaceholder.typicode.com**: Examples that test basic GET operations and user data
+- **reqres.in**: Performing CRUD operations – retrieving, creating, updating, and deleting user information
+- **restcountries.com**: Verifying region and capital information of countries where Turkish is spoken
+- **fakerestapi.azurewebsites.net**: Testing the number of activities and their titles
+
+Each test scenario validates the responses of the related API endpoints based on the following criteria:
+- HTTP status codes
+- Content-Type
+- JSON body content
+
+---
+
+##  How to Run the Tests
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/your-username/SelenTest.git
+cd SelenTest
+```
+
+2. Install dependencies (if using Maven):
+
+```bash
+mvn clean install
+```
+
+3. Run the tests:
+
+```bash
+mvn test
+```
+
+4. View Reports:
+    - HTML Report: `test-output/extent-report.html`
+    - PDF Report: `test-output/pdf-reports/extent-report.pdf`
+
+
+---
+## Technologies Used
+
+- **Java**: Main programming language of the project
+- **Rest Assured**: Java library used for testing API requests and responses
+- **TestNG**:  Powerful framework for organizing tests and enabling parallel execution
+- **Extent Reports**: Visualizes test outputs as interactive HTML reports
+- **openhtmltopdf + jsoup**: Used to convert HTML reports into PDF format
+- **GitHub Actions**: Automates test execution and uploads reports during the CI/CD process
+---
