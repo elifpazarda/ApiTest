@@ -26,6 +26,7 @@ ApiTest/
 ├── src/
 │   └── test/
 │       └── resources/
+│           └── testng.xml
 │           └── testdata/              
 │               └── createUser.json
 │
