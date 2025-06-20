@@ -1,0 +1,33 @@
+{
+  "validUsers": [
+    {
+      "name": "Elif",
+      "job": "QA Engineer",
+      "expectedStatus": 201
+    },
+    {
+      "name": "Ahmet",
+      "job": "Developer",
+      "expectedStatus": 201
+    }
+  ],
+  "invalidUsers": [
+    {
+      "name": "",
+      "job": "QA",
+      "expectedStatus": 400
+    },
+    {
+      "name": "Test",
+      "job": "",
+      "expectedStatus": 400
+    }
+  ],
+  "updateUsers": [
+    {
+      "name": "Elif",
+      "job": "Senior QA Engineer",
+      "expectedStatus": 200
+    }
+  ]
+} 
