@@ -3,9 +3,9 @@
     <test name="API Tests">
         <classes>
             <class name="tests.FakeRestApiTest"/>
-            <class name="tests.GetPostsTest"/>
-            <class name="tests.ReqresTest"/>
             <class name="tests.RestCountriesTest"/>
+            <class name="tests.SampleTest"/>
+            <class name="tests.ReqresTest"/>
         </classes>
     </test>
 </suite>
