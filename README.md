@@ -1,93 +1,82 @@
 # API Test Automation Project
 
-This repository contains API test automation examples developed for various web services. The project is built using the Rest Assured library, with test scenarios managed through the TestNG framework.
+This repository contains REST API test automation scenarios developed using Rest Assured and TestNG. It includes Allure
+integration for detailed reporting and is configured to run in a CI/CD pipeline using GitHub Actions with parallel
+execution support.
 
-To provide detailed reporting of test results, Extent Reports has been integrated, and the reports are converted into PDF format for archiving. GitHub Actions has been configured for Continuous Integration/Continuous Deployment (CI/CD) processes.
-
----
-
-##  Project Structure
+## Project Structure
 
 ```
 ApiTest/
+├── .github/workflows/                 # GitHub Actions CI pipeline
+│   └── test-report.yml
+├── logs/                              # Logback log files
+│   ├── test-execution.log
+│   └── archived/
 ├── src/
 │   └── test/
-│       └── java/
-│           ├── base/                   
-│           │   └── BaseTest.java
-│           ├── tests/                 
-│           │   ├── FakeRestApiTest.java
-│           │   ├── GetPostsTest.java
-│           │   ├── ReqresTest.java
-│           │   └── RestCountriesTest.java
-│           └── utils/                  
-│               └── PdfReportUtil.java
-│
-├── src/
-│   └── test/
+│       ├── java/
+│       │   ├── base/                  # BaseTest setup (Allure, RestAssured, Logger)
+│       │   ├── tests/                 # Test cases for various APIs
+│       │   └── utils/                 # Utility for config reading
 │       └── resources/
-│           └── testng.xml
-│           └── testdata/              
+│           ├── config.properties      # Environment configuration
+│           ├── logback.xml            # Logging configuration
+│           ├── allure.properties      # Allure setup
+│           └── testdata/              # Sample request payloads
 │               └── createUser.json
-│
-├── test-output/
-│   ├── extent-report.html             
-│   └── pdf-reports/
-│       └── extent-report.pdf          
-│
-└── README.md
+├── testng.xml                         # Parallel execution configuration
+├── .gitignore
+├── pom.xml
+
 ```
----
 
-## Contents
+## Supported APIs & Tests
 
-This project includes test scenarios for the following APIs:
+- **fakerestapi.azurewebsites.net** – Validate activity list and titles
+- **restcountries.com** – Verify countries where Turkish is spoken
+- **reqres.in** – CRUD operations for users (GET, POST, PUT, DELETE)
 
-- **jsonplaceholder.typicode.com**: Examples that test basic GET operations and user data
-- **reqres.in**: Performing CRUD operations – retrieving, creating, updating, and deleting user information
-- **restcountries.com**: Verifying region and capital information of countries where Turkish is spoken
-- **fakerestapi.azurewebsites.net**: Testing the number of activities and their titles
+## Sample Test Validations
 
-Each test scenario validates the responses of the related API endpoints based on the following criteria:
-- HTTP status codes
-- Content-Type
-- JSON body content
+- HTTP status code correctness
+- Content-Type headers
+- JSON response body values
+- Data-driven tests via `@DataProvider`
 
----
-
-##  How to Run the Tests
+## Running the Project
 
 1. Clone the repository:
+   ```bash
+   git clone https://github.com/elifpazarda/ApiTest.git
+   cd ApiTest
+   ```
 
-```bash
-git clone https://github.com/your-username/ApiTest.git
-cd ApiTest
-```
+2. Run tests locally:
+   ```bash
+   mvn clean test
+   ```
 
-2. Install dependencies (if using Maven):
+3. Generate Allure report (optional):
+   ```bash
+   allure serve target/allure-results
+   ```
 
-```bash
-mvn clean install
-```
+## GitHub Actions CI/CD
 
-3. Run the tests:
+Test scenarios are triggered on every push or pull request to `main`. The pipeline:
 
-```bash
-mvn test
-```
+- Runs `mvn test`
+- Exports reports (HTML, Allure)
+- Uploads them as artifacts
 
-4. View Reports:
-    - HTML Report: `test-output/extent-report.html`
-    - PDF Report: `test-output/pdf-reports/extent-report.pdf`
+You can find the config under: `.github/workflows/test-report.yml`
 
-
----
 ## Technologies Used
 
-- **Java**: Main programming language of the project
-- **Rest Assured**: Java library used for testing API requests and responses
-- **TestNG**:  Powerful framework for organizing tests and enabling parallel execution
-- **Extent Reports**: Visualizes test outputs as interactive HTML reports
-- **openhtmltopdf + jsoup**: Used to convert HTML reports into PDF format
-- **GitHub Actions**: Automates test execution and uploads reports during the CI/CD process
----
+- Java 17
+- Rest Assured
+- TestNG
+- Allure Reporting
+- Logback Logging
+- GitHub Actions
