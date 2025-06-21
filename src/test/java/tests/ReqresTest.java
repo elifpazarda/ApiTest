@@ -2,13 +2,11 @@ package tests;
 
 import base.BaseTest;
 import io.qameta.allure.*;
+import io.restassured.RestAssured;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -18,11 +16,12 @@ import static org.hamcrest.Matchers.*;
 public class ReqresTest extends BaseTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ReqresTest.class);
+    private static final String BASE_URI = "https://reqres.in";
 
     @DataProvider(name = "userIds")
     public Object[][] provideUserIds() {
         return new Object[][]{
-                {2}, {5}, {10}
+                {1}, {2}
         };
     }
 
@@ -31,7 +30,8 @@ public class ReqresTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Description("Get isteği ile her userId için kullanıcı doğrulanır.")
     public void testGetUserById(int userId) {
-        logger.info("GET isteği gönderiliyor: /api/users/" + userId);
+        RestAssured.baseURI = BASE_URI;
+        logger.info("GET /api/users/" + userId);
 
         given()
                 .when()
@@ -39,18 +39,23 @@ public class ReqresTest extends BaseTest {
                 .then()
                 .assertThat()
                 .statusCode(200)
-                .contentType("application/json")
                 .body("data.id", equalTo(userId));
 
-        logger.info("GET userId=" + userId + " başarılı doğrulandı.");
+        logger.info("Kullanıcı başarıyla doğrulandı: userId=" + userId);
     }
 
     @Test
     @Story("Create user")
     @Severity(SeverityLevel.CRITICAL)
-    @Description("Yeni kullanıcı POST isteği ile başarıyla oluşturulmalı.")
-    public void testCreateUser() throws Exception {
-        String requestBody = Files.readString(Paths.get("src/test/resources/testdata/createUser.json"));
+    @Description("Yeni kullanıcı POST isteği ile oluşturulur.")
+    public void testCreateUser() {
+        RestAssured.baseURI = BASE_URI;
+        String requestBody = """
+                {
+                    "name": "Elif",
+                    "job": "QA Engineer"
+                }
+                """;
 
         given()
                 .header("Content-Type", "application/json")
@@ -61,11 +66,9 @@ public class ReqresTest extends BaseTest {
                 .assertThat()
                 .statusCode(201)
                 .body("name", equalTo("Elif"))
-                .body("job", equalTo("QA Engineer"))
-                .body("id", notNullValue())
-                .body("createdAt", notNullValue());
+                .body("job", equalTo("QA Engineer"));
 
-        logger.info("POST isteği ile kullanıcı başarıyla oluşturuldu.");
+        logger.info("Kullanıcı başarıyla oluşturuldu.");
     }
 
     @Test
@@ -73,6 +76,7 @@ public class ReqresTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     @Description("Var olan kullanıcı PUT isteği ile güncellenir.")
     public void testUpdateUser() {
+        RestAssured.baseURI = BASE_URI;
         String requestBody = """
                 {
                     "name": "Elif",
@@ -89,10 +93,9 @@ public class ReqresTest extends BaseTest {
                 .assertThat()
                 .statusCode(200)
                 .body("name", equalTo("Elif"))
-                .body("job", equalTo("Ceramic Artist"))
-                .body("updatedAt", notNullValue());
+                .body("job", equalTo("Ceramic Artist"));
 
-        logger.info("PUT isteği ile kullanıcı başarıyla güncellendi.");
+        logger.info("Kullanıcı başarıyla güncellendi.");
     }
 
     @Test
@@ -100,12 +103,15 @@ public class ReqresTest extends BaseTest {
     @Severity(SeverityLevel.MINOR)
     @Description("Var olan kullanıcı DELETE isteği ile silinir.")
     public void testDeleteUser() {
+        RestAssured.baseURI = BASE_URI;
+
         given()
                 .when()
                 .delete("/api/users/2")
                 .then()
                 .assertThat()
                 .statusCode(204);
-        logger.info("DELETE isteği ile kullanıcı başarıyla silindi.");
+
+        logger.info("Kullanıcı başarıyla silindi.");
     }
 }

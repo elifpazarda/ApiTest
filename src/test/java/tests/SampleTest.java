@@ -15,9 +15,12 @@ public class SampleTest extends BaseTest {
     @Test
     @Story("Sample Test")
     @Description("This is a sample test to verify TestNG configuration")
-    @Severity(SeverityLevel.NORMAL)
+    @Severity(SeverityLevel.TRIVIAL)
     public void testSample() {
-        logger.info("Sample test çalıştırılıyor...");
-        logger.info("Sample test başarıyla tamamlandı");
+        logger.info("🔹 Sample test başlatıldı.");
+
+        assert "API".startsWith("A");
+
+        logger.info("Sample test başarıyla tamamlandı.");
     }
 }

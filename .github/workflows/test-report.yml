@@ -20,12 +20,34 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Check External APIs
+        run: |
+          echo "Testing reqres.in"
+          curl -I https://reqres.in/api/users/2
+
+          echo "Testing fakerestapi"
+          curl -I https://fakerestapi.azurewebsites.net/api/v1/Activities
+
+          echo "Testing restcountries"
+          curl -I https://restcountries.com/v3.1/lang/tur
+    
+
       - name: Run Tests with Maven
         run: mvn clean test -DsuiteXmlFile=testng.xml
 
-      - name: Upload Allure Results
+      - name: Generate Allure HTML Report
+        run: mvn allure:report
+
+      - name: Upload Allure JSON Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: target/allure-results
+
+      - name: Upload Allure HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
+          path: target/site/allure-maven-plugin

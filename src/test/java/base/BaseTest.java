@@ -14,7 +14,6 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import utils.ConfigReader;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,15 +30,9 @@ public class BaseTest {
     @BeforeSuite
     public void setUp() {
         logger.info("Test suite başlatılıyor...");
-        
-        String environment = ConfigReader.get("environment");
-        String baseUrl = ConfigReader.get("baseUrl." + environment);
 
-        logger.info("Seçilen ortam: {}", environment);
-        logger.info("Base URL yüklendi: {}", baseUrl);
-
+        // Global request ve response specs — test sınıfları kendi baseUri'lerini belirtir
         requestSpec = new RequestSpecBuilder()
-                .setBaseUri(baseUrl)
                 .setContentType("application/json")
                 .setAccept("application/json")
                 .build();
@@ -53,7 +46,6 @@ public class BaseTest {
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-
 
     @BeforeMethod
     public void setUpMethod() {
@@ -77,19 +69,17 @@ public class BaseTest {
         try {
             if (result.getStatus() == ITestResult.FAILURE) {
                 logger.error("Test başarısız: {}", result.getName());
-                Allure.addAttachment("Error", result.getThrowable().getMessage());
+                if (result.getThrowable() != null) {
+                    Allure.addAttachment("Error", result.getThrowable().toString());
+                }
             }
-            if (requestStream.get() != null) {
+
+            if (requestStream.get() != null && requestStream.get().size() > 0) {
                 Allure.addAttachment("API Request", requestStream.get().toString());
             }
-            if (responseStream.get() != null) {
+
+            if (responseStream.get() != null && responseStream.get().size() > 0) {
                 Allure.addAttachment("API Response", responseStream.get().toString());
-            }
-            if (requestStream.get() != null) {
-                requestStream.get().reset();
-            }
-            if (responseStream.get() != null) {
-                responseStream.get().reset();
             }
 
             logger.info("'{}' testi tamamlandı. Sonuç: {}",
